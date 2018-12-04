@@ -1,0 +1,22 @@
+{
+  "test1204App": {
+    "loginResponseData": {
+      "home": {
+        "title": "Login Response Data",
+        "createLabel": "创建新 Login Response Data",
+        "createOrEditLabel": "创建或编辑 Login Response Data"
+      },
+      "created": "Login Response Data {{ param }} 创建成功",
+      "updated": "Login Response Data {{ param }} 更新成功",
+      "deleted": "Login Response Data {{ param }} 删除成功",
+      "delete": {
+        "question": "你确定要删除 Login Response Data {{ id }} 吗？"
+      },
+      "detail": {
+        "title": "Login Response Data"
+      },
+      "success": "Success",
+      "message": "Message"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+    "name": "LoginResponseData",
+    "fields": [
+        {
+            "fieldName": "success",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "message",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20181204073739",
+    "entityTableName": "login_response_data",
+    "dto": "no",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

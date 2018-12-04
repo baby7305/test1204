@@ -1,0 +1,19 @@
+entity LoginResponseData
+{
+success Boolean,
+message String
+}
+entity UserData
+{
+username String,
+password String
+}
+
+service LoginResponseData with serviceClass
+service LoginResponseData with serviceImpl
+paginate LoginResponseData with pagination
+
+service UserData with serviceClass
+service UserData with serviceImpl
+paginate UserData with pagination
+
