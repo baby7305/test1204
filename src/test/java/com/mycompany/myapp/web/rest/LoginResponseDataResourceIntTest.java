@@ -4,7 +4,9 @@ import com.mycompany.myapp.Test1204App;
 
 import com.mycompany.myapp.domain.LoginResponseData;
 import com.mycompany.myapp.repository.LoginResponseDataRepository;
+import com.mycompany.myapp.repository.UserDataRepository;
 import com.mycompany.myapp.service.LoginResponseDataService;
+import com.mycompany.myapp.service.UserDataService;
 import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -67,11 +69,13 @@ public class LoginResponseDataResourceIntTest {
     private MockMvc restLoginResponseDataMockMvc;
 
     private LoginResponseData loginResponseData;
+    private UserDataService userDataService;
+    private UserDataRepository userDataRepository;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final LoginResponseDataResource loginResponseDataResource = new LoginResponseDataResource(loginResponseDataService);
+        final LoginResponseDataResource loginResponseDataResource = new LoginResponseDataResource(loginResponseDataService,userDataService,userDataRepository);
         this.restLoginResponseDataMockMvc = MockMvcBuilders.standaloneSetup(loginResponseDataResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

@@ -2,7 +2,10 @@ package com.mycompany.myapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.mycompany.myapp.domain.LoginResponseData;
+import com.mycompany.myapp.domain.UserData;
+import com.mycompany.myapp.repository.UserDataRepository;
 import com.mycompany.myapp.service.LoginResponseDataService;
+import com.mycompany.myapp.service.UserDataService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import com.mycompany.myapp.web.rest.util.HeaderUtil;
 import com.mycompany.myapp.web.rest.util.PaginationUtil;
@@ -12,13 +15,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,9 +36,13 @@ public class LoginResponseDataResource {
     private static final String ENTITY_NAME = "loginResponseData";
 
     private final LoginResponseDataService loginResponseDataService;
+    private final UserDataService userDataService;
+    private final UserDataRepository userDataRepository;
 
-    public LoginResponseDataResource(LoginResponseDataService loginResponseDataService) {
+    public LoginResponseDataResource(LoginResponseDataService loginResponseDataService, UserDataService userDataService, UserDataRepository userDataRepository) {
         this.loginResponseDataService = loginResponseDataService;
+        this.userDataService = userDataService;
+        this.userDataRepository = userDataRepository;
     }
 
     /**
@@ -57,6 +63,41 @@ public class LoginResponseDataResource {
         return ResponseEntity.created(new URI("/api/login-response-data/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+
+    /**
+     * POST /login-response-data : Create a new loginResponseData.
+     *
+     * @param userData the loginResponseData to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new
+     * loginResponseData, or with status 400 (Bad Request) if the
+     * loginResponseData has already an ID
+     */
+    @PostMapping("/login-response-data/login")
+    @Timed
+    public LoginResponseData login(@RequestBody UserData userData) throws URISyntaxException {
+        log.debug("REST request to save userData : {}", userData);
+        String username = userData.getUsername();
+        List<UserData> userDataList = new ArrayList<>();
+        userDataList = userDataRepository.findByUsername(username);
+        String message;
+        Boolean success;
+        if (userDataList.size() < 1) {
+            message = "account not exist";
+            success = false;
+            return new LoginResponseData(false, message);
+        } else {
+            String password = userData.getPassword();
+            String password1 = userDataList.get(0).getPassword();
+            if (!password.equals(password1)) {
+                message = "Invalid credentials";
+                success = false;
+            } else {
+                message = "This is the secret no one knows but the admin";
+                success = true;
+            }
+        }
+        return new LoginResponseData(success, message);
     }
 
     /**
